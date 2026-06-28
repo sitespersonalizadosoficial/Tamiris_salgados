@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Tamiris Salgados | Pedido Online</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+ 
+<style>
+/* ==========================================================================
+   CONFIGURAÇÕES GERAIS E RESETS
+   ========================================================================== */
+*{ margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+html{ scroll-behavior: smooth; }
+
+:root {
+    --bg-site: #FDFBF7;    /* Fundo creme bem suave */
+    --bg-amarelo: #F29F05; /* Amarelo da logo para detalhes */
+    --cor-vinho: #4A0E17;  /* Vinho da logo */
+    --cor-texto: #3E1F0F;  /* Marrom escuro para textos */
+    --bg-card: #FFFFFF;    /* Fundo branco para os cards */
+}
+
+body{ 
+    background: var(--bg-site); 
+    color: var(--cor-texto); 
+    overflow-x: hidden; 
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-site); }
+::-webkit-scrollbar-thumb { background: var(--cor-vinho); border-radius: 4px; }
+
+/* ==========================================================================
+   HEADER (CABEÇALHO)
+   ========================================================================== */
+header{ 
+    position: sticky; 
+    top: 0; 
+    z-index: 999; 
+    background: var(--cor-vinho); 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.top-header{ 
+    display: flex; justify-content: space-between; align-items: center; 
+    padding: 15px 20px; max-width: 1000px; margin: 0 auto;
+}
+
+.logo-area{ display: flex; align-items: center; gap: 15px; }
+
+.logo-img {
+    width: 65px; 
+    height: 65px; 
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid var(--bg-amarelo);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    background-color: var(--bg-amarelo); /* Caso a imagem não carregue, fica amarelo */
+}
+
+.logo-text h1{ color: var(--bg-amarelo); font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+.logo-text span{ color: #fff; font-size: 12px; font-weight: 500; letter-spacing: 1px; }
+
+.cart-btn{ 
+    background: var(--bg-amarelo); color: var(--cor-vinho); border: none;
+    width: 50px; height: 50px; border-radius: 50%; font-size: 22px; 
+    cursor: pointer; position: relative; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+.cart-btn:hover { transform: scale(1.05); }
+.cart-btn span{ 
+    position: absolute; top: -5px; right: -5px; 
+    width: 22px; height: 22px; border-radius: 50%; background: #fff; color: var(--cor-vinho); 
+    display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; 
+}
+
+/* ==========================================================================
+   MENU DE CATEGORIAS
+   ========================================================================== */
+.menu-categorias-container { background: rgba(0,0,0,0.2); }
+.menu-categorias{ 
+    display: flex; gap: 15px; overflow-x: auto; padding: 12px 20px; 
+    scrollbar-width: none; max-width: 1000px; margin: 0 auto;
+}
+.menu-categorias::-webkit-scrollbar{ display: none; }
+.menu-categorias a { 
+    text-decoration: none; background: #fff; color: var(--cor-vinho); 
+    padding: 8px 20px; border-radius: 30px; font-size: 14px; font-weight: 700; 
+    white-space: nowrap; transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.menu-categorias a:hover{ background: var(--bg-amarelo); color: var(--cor-vinho); }
+
+/* ==========================================================================
+   ÁREA DE PRODUTOS (CARDS HORIZONTAIS)
+   ========================================================================== */
+.produtos-area{ padding: 30px 20px 100px; max-width: 1000px; margin: 0 auto; }
+.categoria{ margin-bottom: 50px; }
+.categoria h2{ 
+    color: var(--cor-vinho); margin-bottom: 25px; font-size: 24px; font-weight: 800; 
+    text-transform: uppercase; border-bottom: 2px solid rgba(74, 14, 23, 0.1); padding-bottom: 10px;
+}
+
+.produtos-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+    gap: 15px; 
+}
+
+.card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: row; /* Alinha imagem e texto lado a lado */
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+
+.card img { 
+    width: 110px; 
+    height: 110px; 
+    border-radius: 10px;
+    object-fit: cover; 
+    background-color: #f0f0f0; 
+    flex-shrink: 0;
+}
+
+.card-info { 
+    padding-left: 15px; 
+    display: flex; 
+    flex-direction: column; 
+    flex-grow: 1; 
+    justify-content: space-between;
+    height: 100%;
+}
+
+.card-info h3 { 
+    font-size: 15px; 
+    font-weight: 700; 
+    color: var(--cor-vinho); 
+    text-transform: uppercase; 
+    margin-bottom: 5px; 
+    line-height: 1.2; 
+}
+
+.card-action { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-top: 15px;
+}
+
+.card-action span { 
+    color: var(--cor-texto); 
+    font-weight: 800; 
+    font-size: 16px; 
+}
+
+.card-action button { 
+    background: var(--cor-vinho); color: var(--bg-amarelo); border: none; 
+    width: 32px; height: 32px; border-radius: 8px; font-size: 20px; font-weight: bold;
+    cursor: pointer; transition: 0.2s; 
+}
+.card-action button:hover { transform: scale(1.1); background: var(--bg-amarelo); color: var(--cor-vinho); }
+.card-action button:active { transform: scale(0.95); }
+
+/* ==========================================================================
+   CARRINHO LATERAL
+   ========================================================================== */
+.overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 999998; opacity: 0; visibility: hidden; transition: 0.3s; }
+.overlay.active { opacity: 1; visibility: visible; }
+
+.carrinho{ 
+    position: fixed; top: 0; right: -450px; width: 400px; max-width: 100vw; height: 100vh; 
+    background: var(--bg-site); z-index: 999999; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+    display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+}
+.carrinho.active{ right: 0; }
+
+.cart-header{ background: var(--cor-vinho); padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+.cart-header h2{ color: var(--bg-amarelo); font-weight: 800; }
+.fechar-cart{ width: 35px; height: 35px; border: none; border-radius: 50%; background: rgba(255,255,255,0.2); color: #fff; cursor: pointer; font-size: 18px; font-weight: bold; }
+
+#itensCarrinho { flex: 1; overflow-y: auto; padding: 20px; }
+.item{ background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 10px; border: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.02);}
+.item-info { color: var(--cor-texto); font-weight: 700; font-size: 14px; }
+.item-preco { color: var(--cor-vinho); font-weight: 800; }
+
+.total{ font-size: 20px; color: var(--cor-vinho); font-weight: 800; text-align: right; margin-bottom: 15px; padding: 0 20px;}
+
+.select-area { background: #fff; padding: 20px; border-top: 1px solid rgba(0,0,0,0.1); }
+.select-area label{ display: block; margin-bottom: 8px; color: var(--cor-texto); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
+.select-area select, .select-area input, .select-area textarea { 
+    width: 100%; padding: 12px; border: 2px solid rgba(0,0,0,0.1); border-radius: 8px; margin-bottom: 15px; 
+    background: var(--bg-site); color: var(--cor-texto); font-size: 14px; font-weight: 600; outline: none; transition: 0.3s;
+}
+.select-area select:focus, .select-area input:focus, .select-area textarea:focus { border-color: var(--cor-vinho); }
+.select-area textarea { resize: vertical; height: 80px; }
+
+.finalizar{ width: 100%; padding: 18px; border: none; border-radius: 8px; background: #25D366; color: #fff; font-size: 18px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px; }
+.finalizar:hover { background: #1ebd5a; }
+
+@media(max-width:768px){
+    .carrinho{ width: 100%; right: -100%; }
+    .carrinho.active { right: 0; }
+    .categoria h2 { font-size: 20px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="top-header">
+        <div class="logo-area">
+            <img src="image.png" alt="Logo Tamiris Salgados" class="logo-img">
+            <div class="logo-text">
+                <h1>Tamiris Salgados</h1>
+                <span>Produtos Alimentícios • Desde 2015</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="cart-btn" onclick="toggleCarrinho()">
+                🛒<span id="cartCount">0</span>
+            </button>
+        </div>
+    </div>
+    <div class="menu-categorias-container">
+        <div class="menu-categorias">
+            <a href="#unidade">Grandes (Unidade)</a>
+            <a href="#centos">Mini (Cento)</a>
+            <a href="#medalhoes">Medalhões Gourmet</a>
+        </div>
+    </div>
+</header>
+
+<div class="produtos-area">
+
+    <div class="categoria" id="unidade">
+        <h2>Salgados Fritos • Grande (Unidade)</h2>
+        
+        <div class="produtos-grid">
+            <div class="card">
+                <img src="https://loveloo.com.br/wp-content/uploads/2025/04/Carne-Moida-site.webp" alt="Coxinha de Carne">
+                <div class="card-info">
+                    <h3>Coxinha de Carne</h3>
+                    <div class="card-action">
+                        <span>R$ 5,00</span>
+                        <button onclick="addCarrinho('Coxinha de Carne (Grande)', 5)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaJCkoSlSbvTE_EPy0Qs9HmjSm681OcPrx8xkjcbntHz2IBM2vhy5q7mZA&s=10" alt="Coxinha de Frango">
+                <div class="card-info">
+                    <h3>Coxinha de Frango</h3>
+                    <div class="card-action">
+                        <span>R$ 5,00</span>
+                        <button onclick="addCarrinho('Coxinha de Frango (Grande)', 5)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://cdn.ibahia.com/img/inline/290000/1210x1920/inline_00293631_00/ScaleUpProportional-2.webp?fallback=%2Fimg%2Finline%2F290000%2Finline_00293631_00.png%3Fxid%3D1311847&xid=1311847" alt="Presunto e Queijo">
+                <div class="card-info">
+                    <h3>Presunto e Queijo</h3>
+                    <div class="card-action">
+                        <span>R$ 5,00</span>
+                        <button onclick="addCarrinho('Presunto e Queijo (Grande)', 5)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://nacolher.com/wp-content/uploads/2021/05/Salsicha-no-Palito.jpg" alt="Salsicha com Queijo">
+                <div class="card-info">
+                    <h3>Salsicha com Queijo</h3>
+                    <div class="card-action">
+                        <span>R$ 5,00</span>
+                        <button onclick="addCarrinho('Salsicha com Queijo (Grande)', 5)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://paodequeijodomaestro.com.br/wp-content/uploads/2022/01/kibe.jpg" alt="Quibe">
+                <div class="card-info">
+                    <h3>Quibe</h3>
+                    <div class="card-action">
+                        <span>R$ 5,00</span>
+                        <button onclick="addCarrinho('Quibe (Grande)', 5)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://i.ytimg.com/vi/zkeI7UuGAMQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLD3LDM6bwW1EjuMd0PfGl5G9Q-pGQ" alt="Croquete com Carne">
+                <div class="card-info">
+                    <h3>Croquete com Carne</h3>
+                    <div class="card-action">
+                        <span>R$ 5,00</span>
+                        <button onclick="addCarrinho('Croquete com Carne (Grande)', 5)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="categoria" id="centos">
+        <h2>Salgados Fritos • Mini (Cento)</h2>
+        
+        <div class="produtos-grid">
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWcaYKak7nRaRCDXO2TfxH4-S_a9wDU8lVUpnFgjH8DSpkG_3oNae5haA&s=10" alt="Cento Coxinha de Frango">
+                <div class="card-info">
+                    <h3>Coxinha de Frango</h3>
+                    <div class="card-action">
+                        <span>R$ 90,00</span>
+                        <button onclick="addCarrinho('Cento - Coxinha de Frango', 90)">+</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <img src="https://jopanas.com.br/wp-content/uploads/2021/07/coxinha-carne.png" alt="Cento Coxinha de Carne">
+                <div class="card-info">
+                    <h3>Coxinha de Carne</h3>
+                    <div class="card-action">
+                        <span>R$ 90,00</span>
+                        <button onclick="addCarrinho('Cento - Coxinha de Carne', 90)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://www.seara.com.br/wp-content/uploads/2025/09/salgadinho-de-salsicha1200.jpg" alt="Cento Salsicha">
+                <div class="card-info">
+                    <h3>Salsicha</h3>
+                    <div class="card-action">
+                        <span>R$ 90,00</span>
+                        <button onclick="addCarrinho('Cento - Salsicha', 90)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw7_uhAz14NAy_JTlj-h48usXFjpuYoNluHfmzmIqp6mbdzUpIIwak5t0&s=10" alt="Cento Presunto e Queijo">
+                <div class="card-info">
+                    <h3>Presunto e Queijo</h3>
+                    <div class="card-action">
+                        <span>R$ 90,00</span>
+                        <button onclick="addCarrinho('Cento - Presunto e Queijo', 90)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTD_bWhp6WtsNliRvzORveHYdZ7swY09R758cN1rbM5zZRo8ND-MOcQuMqB&s=10" alt="Cento Bolinha de Queijo">
+                <div class="card-info">
+                    <h3>Bolinha de Queijo</h3>
+                    <div class="card-action">
+                        <span>R$ 90,00</span>
+                        <button onclick="addCarrinho('Cento - Bolinha de Queijo', 90)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://i.ytimg.com/vi/G0psq05o4fw/maxresdefault.jpg" alt="Cento Risoles">
+                <div class="card-info">
+                    <h3>Risoles Catupiry / Milho</h3>
+                    <div class="card-action">
+                        <span>R$ 90,00</span>
+                        <button onclick="addCarrinho('Cento - Risoles Catupiry/Milho', 90)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://i.ytimg.com/vi/EfHN1O7ph9U/maxresdefault.jpg" alt="Cento Quibe">
+                <div class="card-info">
+                    <h3>Quibe</h3>
+                    <div class="card-action">
+                        <span>R$ 90,00</span>
+                        <button onclick="addCarrinho('Cento - Quibe', 90)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="categoria" id="medalhoes">
+        <h2>Medalhões Gourmet</h2>
+        
+        <div class="produtos-grid">
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTK7O-13lsdwqRfpssv3ETUPRbj_6wLlB3QK6HnYBCypk9GpFMsNudUUw&s=10" alt="Medalhão de Frango">
+                <div class="card-info">
+                    <h3>Medalhão de Frango</h3>
+                    <div class="card-action">
+                        <span>R$ 22,00</span>
+                        <button onclick="addCarrinho('Medalhão de Frango', 22)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-info">
+                    <h3>Delícia de Mandioca</h3>
+                    <div class="card-action">
+                        <span>R$ 22,00</span>
+                        <button onclick="addCarrinho('Delícia de Mandioca', 22)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_8z-o4aGrk2XSEkSF1RJf1jZ1Z9yhCS9eKT6FSSp5n_uU0SYE3jy32ZY&s=10" alt="Quibe com Mussarela">
+                <div class="card-info">
+                    <h3>Quibe com Mussarela</h3>
+                    <div class="card-action">
+                        <span>R$ 22,00</span>
+                        <button onclick="addCarrinho('Quibe com Mussarela', 22)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbfa-cJ_b5SkGFC86maHx712eXykiS5XaA4A2YFL-KXVztKldWntJKqrlw&s=10" alt="Medalhão de Quiabo">
+                <div class="card-info">
+                    <h3>Medalhão de Quiabo</h3>
+                    <div class="card-action">
+                        <span>R$ 22,00</span>
+                        <button onclick="addCarrinho('Medalhão de Quiabo', 22)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://carnesnobresevinhos.com.br/wp-content/uploads/2025/02/15324192389-design-sem-nome-2025-02-05t131126-578.webp" alt="Medalhão de Carne Seca">
+                <div class="card-info">
+                    <h3>Medalhão de mandioca com Carne Seca</h3>
+                    <div class="card-action">
+                        <span>R$ 28,00</span>
+                        <button onclick="addCarrinho('Medalhão de mandioca com Carne Seca', 28)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0_H-FtwduRW_0l2VJuQSVPzQuBl-bUUZp1MCFVWm9a7aCGzqMcwHYlF8t&s=10" alt="Medalhão de Romeu e Julieta">
+                <div class="card-info">
+                    <h3>Medalhão de Romeu e Julieta</h3>
+                    <div class="card-action">
+                        <span>R$ 28,00</span>
+                        <button onclick="addCarrinho('Medalhão Romeu e Julieta', 28)">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="https://img1.wsimg.com/isteam/ip/9fc18cc9-1169-448b-8e03-9e9a44fb0f2b/DSC_3091-Editar.jpg/:/cr=t:0%25,l:16.67%25,w:66.67%25,h:100%25/rs=w:600,h:600,cg:true" alt="Medalhão de Mandioca com Mussarela">
+                <div class="card-info">
+                    <h3>Medalhão de Mandioca com Mussarela</h3>
+                    <div class="card-action">
+                        <span>R$ 26,00</span>
+                        <button onclick="addCarrinho('Medalhão Mandioca c/ Mussarela', 26)">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="overlay" id="overlay" onclick="toggleCarrinho()"></div>
+
+<div class="carrinho" id="carrinho">
+    <div class="cart-header">
+        <h2>🛒 Seu Pedido</h2>
+        <button class="fechar-cart" onclick="fecharCarrinho()">✕</button>
+    </div>
+
+    <div id="itensCarrinho">
+        <p style="text-align:center; color:#3E1F0F; margin-top: 20px;">Nenhum item adicionado.</p>
+    </div>
+
+    <div class="total" id="total">
+        Total: R$ 0,00
+    </div>
+
+    <div class="select-area">
+        <label>Como deseja receber?</label>
+        <select id="tipoPedido" onchange="mostrarCampos()">
+            <option value="">Selecione uma opção</option>
+            <option value="retirada">Vou retirar no balcão</option>
+            <option value="delivery">Quero Delivery (Taxa R$ 5,00)</option>
+            <option value="local">Estou comendo na mesa</option>
+        </select>
+
+        <div id="enderecoArea" style="display:none;">
+            <label>Seu Endereço Completo</label>
+            <textarea id="endereco" placeholder="Rua, número, bairro e referência..."></textarea>
+        </div>
+
+        <div id="mesaArea" style="display:none;">
+            <label>Número da Mesa</label>
+            <input type="number" id="mesa" placeholder="Ex: 04">
+        </div>
+
+        <label>Seu Nome</label>
+        <input type="text" id="cliente" placeholder="Como devemos chamá-lo?">
+
+        <label>Como vai pagar?</label>
+        <select id="pagamento">
+            <option>Dinheiro</option>
+            <option>Pix</option>
+            <option>Cartão de Crédito/Débito</option>
+        </select>
+
+        <button class="finalizar" onclick="finalizarPedido()">
+           Finalizar Pedido 
+        </button>
+    </div>
+</div>
+
+<script>
+    let carrinho = [];
+    let taxaDelivery = 0;
+
+    function toggleCarrinho() {
+        document.getElementById('carrinho').classList.toggle('active');
+        document.getElementById('overlay').classList.toggle('active');
+    }
+
+    function fecharCarrinho() {
+        toggleCarrinho();
+    }
+
+    function mostrarCampos() {
+        const tipo = document.getElementById('tipoPedido').value;
+        const divEndereco = document.getElementById('enderecoArea');
+        const divMesa = document.getElementById('mesaArea');
+
+        divEndereco.style.display = 'none';
+        divMesa.style.display = 'none';
+        taxaDelivery = 0;
+
+        if (tipo === 'delivery') {
+            divEndereco.style.display = 'block';
+            taxaDelivery = 5;
+        } else if (tipo === 'local') {
+            divMesa.style.display = 'block';
+        }
+
+        atualizarCarrinho();
+    }
+
+    function addCarrinho(nome, preco) {
+        carrinho.push({ nome, preco });
+        atualizarCarrinho();
+        
+        const btn = document.querySelector('.cart-btn');
+        btn.style.transform = 'scale(1.2)';
+        setTimeout(() => btn.style.transform = 'scale(1)', 200);
+    }
+
+    function removerItem(index) {
+        carrinho.splice(index, 1);
+        atualizarCarrinho();
+    }
+
+    function atualizarCarrinho() {
+        document.getElementById('cartCount').innerText = carrinho.length;
+        
+        let totalProdutos = carrinho.reduce((sum, item) => sum + item.preco, 0);
+        let valorFinal = totalProdutos + taxaDelivery;
+
+        let textoTotal = `Total: R$ ${valorFinal.toFixed(2).replace('.', ',')}`;
+        if(taxaDelivery > 0) {
+            textoTotal += ` <span style="font-size:13px; font-weight:500; color:#888;">(+ R$5 taxa)</span>`;
+        }
+        document.getElementById('total').innerHTML = textoTotal;
+        
+        const container = document.getElementById('itensCarrinho');
+        if (carrinho.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color:#3E1F0F; margin-top: 20px;">Nenhum item adicionado.</p>';
+            return;
+        }
+
+        container.innerHTML = carrinho.map((item, index) => `
+            <div class="item">
+                <span class="item-info">${item.nome}</span>
+                <div style="display:flex; align-items:center; gap: 10px;">
+                    <span class="item-preco">R$ ${item.preco.toFixed(2).replace('.', ',')}</span>
+                    <button onclick="removerItem(${index})" style="background:none; border:none; color:#4A0E17; font-size:18px; cursor:pointer; font-weight:bold;">✕</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function finalizarPedido() {
+        if (carrinho.length === 0) {
+            alert('Seu carrinho está vazio! Adicione produtos antes de finalizar.');
+            return;
+        }
+
+        const tipo = document.getElementById('tipoPedido').value;
+        const cliente = document.getElementById('cliente').value.trim();
+        const pagamento = document.getElementById('pagamento').value;
+        const endereco = document.getElementById('endereco').value.trim();
+        const mesa = document.getElementById('mesa').value.trim();
+
+        if (!tipo) { alert('Selecione como deseja receber o pedido!'); return; }
+        if (!cliente) { alert('Por favor, informe seu nome!'); return; }
+
+        if (tipo === 'delivery' && !endereco) {
+            alert('Por favor, informe seu endereço completo para a entrega!');
+            return;
+        }
+        if (tipo === 'local' && !mesa) {
+            alert('Por favor, informe o número da mesa!');
+            return;
+        }
+
+        let texto = `*NOVO PEDIDO - TAMIRIS SALGADOS*%0A`;
+        texto += `*Cliente:* ${cliente}%0A%0A`;
+        
+        carrinho.forEach(item => {
+            texto += `▪️ ${item.nome} - R$ ${item.preco.toFixed(2)}%0A`;
+        });
+        
+        let totalProdutos = carrinho.reduce((sum, item) => sum + item.preco, 0);
+        
+        texto += `%0A*Subtotal Produtos:* R$ ${totalProdutos.toFixed(2)}%0A`;
+        if (tipo === 'delivery') {
+            texto += `*Taxa de Entrega:* R$ 5.00%0A`;
+        }
+        texto += `*Total a pagar:* R$ ${(totalProdutos + taxaDelivery).toFixed(2)}%0A%0A`;
+        
+        texto += `*Modo:* `;
+        if (tipo === 'retirada') texto += `Vou retirar no balcão%0A`;
+        else if (tipo === 'delivery') texto += `Delivery%0A*Endereço:* ${endereco}%0A`;
+        else if (tipo === 'local') texto += `Comendo no local%0A*Mesa:* ${mesa}%0A`;
+
+        texto += `*Pagamento:* ${pagamento}%0A`;
+
+        window.open(`https://wa.me/5517991772114?text=${texto}`, '_blank');
+    }
+</script>
+
+</body>
+</html>
